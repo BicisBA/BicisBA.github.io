@@ -5,10 +5,18 @@ import 'leaflet-defaulticon-compatibility';
 import "leaflet-geosearch/dist/geosearch.css";
 import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import { GeoSearchControl, OpenStreetMapProvider } from "leaflet-geosearch";
+import "leaflet-easybutton/src/easy-button.js";
+import "leaflet-easybutton/src/easy-button.css";
+import L from "leaflet";
+import "font-awesome/css/font-awesome.min.css";
 
-function LeafletgeoSearch() {
+function LeafletPlugins() {
   const map = useMap();
+
+  // Search Bar
   useEffect(() => {
+    if (!map) return
+
     const provider = new OpenStreetMapProvider();
     const searchControl = new GeoSearchControl({
       provider,
@@ -17,11 +25,23 @@ function LeafletgeoSearch() {
       searchLabel: 'Dirección',
     });
     map.addControl(searchControl);
-    // Actualizar lista de estaciones que se muestran en el drawer
-    // - cuando se elige un search result // - cuando se mueve el mapaks
-    // map.on('geosearch/showlocation', yourEventHandler);
     return () => map.removeControl(searchControl);
   }, [map]);
+
+  // Locate-me button
+  useEffect(() => {
+    if (!map) return
+
+    const btn = L.easyButton("fa-crosshairs", () => {
+      map.locate().on("locationfound", function (e) {
+        map.flyTo(e.latlng, map.getZoom());
+      });
+    });
+    map.addControl(btn);
+    return () => map.removeControl(btn);
+  }, [map]);
+
+  // TO DO: Refresh estaciones button
 
   return null;
 }
@@ -41,7 +61,7 @@ function Map() {
           Obelisco!
         </Popup>
       </Marker>
-      <LeafletgeoSearch />
+      <LeafletPlugins />
 
     </MapContainer>
   );
