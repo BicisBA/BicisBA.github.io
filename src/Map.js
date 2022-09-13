@@ -53,7 +53,11 @@ function Map() {
   return (
     <MapContainer
       center={{ lat: -34.6037, lng: -58.3816 }} // Obelisco
+      maxBounds={[[-34.524197, -58.552391], [-34.715765, -58.265415]]} // A manopla
+      maxBoundsViscosity={0.9}
       zoom={17}
+      minZoom={13}
+      maxZoom={18}
       style={{ height: "100vh", width: "100vw" }}
     >
       <TileLayer
