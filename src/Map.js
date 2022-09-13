@@ -9,6 +9,7 @@ import "leaflet-easybutton/src/easy-button.js";
 import "leaflet-easybutton/src/easy-button.css";
 import L from "leaflet";
 import "font-awesome/css/font-awesome.min.css";
+import { DataContext } from "./Contexts";
 
 function LeafletPlugins() {
   const map = useMap();
@@ -47,20 +48,24 @@ function LeafletPlugins() {
 }
 
 function Map() {
+  const { estaciones } = React.useContext(DataContext);
+
   return (
     <MapContainer
       center={{ lat: -34.6037, lng: -58.3816 }} // Obelisco
-      zoom={15}
+      zoom={17}
       style={{ height: "100vh", width: "100vw" }}
     >
       <TileLayer
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
-      <Marker position={[-34.6037, -58.3816]}>
-        <Popup>
-          Obelisco!
-        </Popup>
-      </Marker>
+      {estaciones.map((estacion) => (
+        <Marker position={[estacion.lat, estacion.lon]} key={estacion.station_id}>
+          <Popup closeButton={false}>
+            <strong>{estacion.name}</strong>
+          </Popup>
+        </Marker>
+      ))}
       <LeafletPlugins />
 
     </MapContainer>
