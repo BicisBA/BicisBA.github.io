@@ -48,7 +48,7 @@ function LeafletPlugins() {
 }
 
 function Map() {
-  const { estaciones, center, setCenter } = React.useContext(DataContext);
+  const { estaciones, center, setCenter, nearestEstaciones } = React.useContext(DataContext);
 
   return (
     <MapContainer
@@ -63,8 +63,10 @@ function Map() {
       <TileLayer
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
-      {estaciones.map((estacion) => (
-        <Marker position={[estacion.lat, estacion.lon]} key={estacion.station_id}>
+      {Object.values(estaciones).map((estacion) => (
+        <Marker
+          opacity={Object.keys(nearestEstaciones).includes(estacion.station_id) ? 1 : 0.4}
+          position={[estacion.lat, estacion.lon]} key={estacion.station_id}>
           <Popup closeButton={false}>
             <strong>{estacion.name}</strong>
           </Popup>

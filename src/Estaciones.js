@@ -9,12 +9,14 @@ import React from "react";
 import { DataContext } from "./Contexts";
 
 function Estacion({ estacion }) {
+  const { estaciones } = React.useContext(DataContext);
+
   return (
     <>
       <Flex direction={'row'} justifyContent="space-between">
         <Stat size="sm" textAlign="left">
-          <StatNumber>{estacion.name}</StatNumber>
-          <StatHelpText>Estación</StatHelpText>
+          <StatNumber>{estaciones[estacion.station_id].name}</StatNumber>
+          <StatHelpText>Estación a {Math.round(estacion.distance, 2)}m</StatHelpText>
         </Stat>
 
         <Stat size="sm" textAlign="right">
@@ -30,7 +32,7 @@ function Estacion({ estacion }) {
 
 function Estaciones() {
   const [expand, setExpand] = React.useState(false)
-  const { topEstaciones } = React.useContext(DataContext);
+  const { nearestEstaciones } = React.useContext(DataContext);
 
 
   return (
@@ -41,7 +43,7 @@ function Estaciones() {
       </Flex>
 
       <Collapse startingHeight={50} in={expand}>
-        {topEstaciones.map((estacion) => (
+        {Object.values(nearestEstaciones).sort((a, b) => a.ranking - b.ranking).map((estacion) => (
           <Estacion estacion={estacion} key={estacion.station_id} />))
         }
       </Collapse>
