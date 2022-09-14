@@ -9,7 +9,8 @@ import React from "react";
 import { DataContext } from "./Contexts";
 
 function Estacion({ estacion }) {
-  const { estaciones } = React.useContext(DataContext);
+  const { estaciones, bicis } = React.useContext(DataContext);
+  const bicis_disponibles = bicis[estacion.station_id].num_bikes_available
 
   return (
     <>
@@ -20,8 +21,8 @@ function Estacion({ estacion }) {
         </Stat>
 
         <Stat size="sm" textAlign="right">
-          <StatNumber>10</StatNumber>
-          <StatHelpText>Bicicletas</StatHelpText>
+          <StatNumber>{bicis_disponibles}</StatNumber>
+          <StatHelpText>{bicis_disponibles === 1 ? 'Bicicleta' : 'Bicicletas'}</StatHelpText>
         </Stat>
 
       </Flex>

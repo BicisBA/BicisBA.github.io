@@ -10,6 +10,7 @@ import "leaflet-easybutton/src/easy-button.css";
 import L from "leaflet";
 import "font-awesome/css/font-awesome.min.css";
 import { DataContext } from "./Contexts";
+import { Text } from "@chakra-ui/react";
 
 function LeafletPlugins() {
   const map = useMap();
@@ -48,7 +49,7 @@ function LeafletPlugins() {
 }
 
 function Map() {
-  const { estaciones, center, setCenter, nearestEstaciones } = React.useContext(DataContext);
+  const { estaciones, center, setCenter, nearestEstaciones, bicis } = React.useContext(DataContext);
 
   return (
     <MapContainer
@@ -63,15 +64,20 @@ function Map() {
       <TileLayer
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
-      {Object.values(estaciones).map((estacion) => (
-        <Marker
+      {Object.values(estaciones).map((estacion) => {
+        const bicis_disponibles = bicis[estacion.station_id].num_bikes_available
+        return (<Marker
           opacity={Object.keys(nearestEstaciones).includes(estacion.station_id) ? 1 : 0.4}
           position={[estacion.lat, estacion.lon]} key={estacion.station_id}>
           <Popup closeButton={false}>
-            <strong>{estacion.name}</strong>
+            <Text textAlign={'center'}>
+              <strong>{estacion.name} </strong>
+              <br />
+              <strong>{bicis_disponibles}</strong> {bicis_disponibles === 1 ? 'bici' : 'bicis'}
+            </Text>
           </Popup>
-        </Marker>
-      ))}
+        </Marker>)
+      })}
       <Marker position={center} draggable={true}
         eventHandlers={{
           moveend: (e) => {

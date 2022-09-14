@@ -21,24 +21,40 @@ const getAPITransporte = async (endpoint) => {
   if (endpoint === 'stationStatus') {
     return stationStatusMock
   }
+}
 
+const fetchAPITransporte = async (endpoint) => {
+  const info = await getAPITransporte(endpoint)
+  const byStationId = info.data.stations.reduce((acc, station) => {
+    acc[station.station_id] = station
+    return acc
+  }, {})
+  return byStationId
 }
 
 const useData = () => {
-  const [estaciones, setEstaciones] = React.useState([])
+  const [estaciones, setEstaciones] = React.useState({})
+  const [nearestEstaciones, setNearestEstaciones] = React.useState({})
+  const [bicis, setBicis] = React.useState({})
   const [center, setCenter] = React.useState({ lat: -34.6037, lng: -58.3816 }); // Obeliscou
-  const [nearestEstaciones, setNearestEstaciones] = React.useState([])
 
   useEffect(() => {
     const fetchStationInformation = async () => {
-      const stationInformation = await getAPITransporte('stationInformation')
-      const stationsById = stationInformation.data.stations.reduce((acc, station) => {
-        acc[station.station_id] = station
-        return acc
-      }, {})
+      const stationsById = await fetchAPITransporte('stationInformation')
       setEstaciones(stationsById)
     }
     fetchStationInformation()
+  }, [])
+
+  useEffect(() => {
+    const fetchBicis = async () => {
+      const bicisByStationId = await fetchAPITransporte('stationStatus')
+      setBicis(bicisByStationId)
+    }
+    fetchBicis() // We call it on boot, and then set a timer to call it every 30 seconds
+    const interval = setInterval(fetchBicis, 30000);
+
+    return () => clearInterval(interval);
   }, [])
 
   useEffect(() => {
@@ -72,6 +88,7 @@ const useData = () => {
 
   return {
     estaciones,
+    bicis,
     center,
     setCenter,
     nearestEstaciones,
