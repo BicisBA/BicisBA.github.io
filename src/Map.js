@@ -48,7 +48,7 @@ function LeafletPlugins() {
 }
 
 function Map() {
-  const { estaciones } = React.useContext(DataContext);
+  const { estaciones, center, setCenter } = React.useContext(DataContext);
 
   return (
     <MapContainer
@@ -70,6 +70,14 @@ function Map() {
           </Popup>
         </Marker>
       ))}
+      <Marker position={center} draggable={true}
+        eventHandlers={{
+          moveend: (e) => {
+            setCenter(e.target.getLatLng());
+          },
+        }}
+      >
+      </Marker>
       <LeafletPlugins />
 
     </MapContainer>

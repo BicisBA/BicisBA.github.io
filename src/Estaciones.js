@@ -6,13 +6,14 @@ import {
   Divider,
 } from "@chakra-ui/react";
 import React from "react";
+import { DataContext } from "./Contexts";
 
-function Estacion() {
+function Estacion({ estacion }) {
   return (
     <>
       <Flex direction={'row'} justifyContent="space-between">
         <Stat size="sm" textAlign="left">
-          <StatNumber>Congreso 2137</StatNumber>
+          <StatNumber>{estacion.name}</StatNumber>
           <StatHelpText>Estación</StatHelpText>
         </Stat>
 
@@ -29,6 +30,8 @@ function Estacion() {
 
 function Estaciones() {
   const [expand, setExpand] = React.useState(false)
+  const { topEstaciones } = React.useContext(DataContext);
+
 
   return (
     <Box position="absolute" bottom="0" zIndex={1000} w="100%" bg="orange.50" p={4} rounded="lg" borderTop="2px solid orange">
@@ -38,9 +41,9 @@ function Estaciones() {
       </Flex>
 
       <Collapse startingHeight={50} in={expand}>
-        <Estacion />
-        <Estacion />
-        <Estacion />
+        {topEstaciones.map((estacion) => (
+          <Estacion estacion={estacion} key={estacion.station_id} />))
+        }
       </Collapse>
     </Box>
   );

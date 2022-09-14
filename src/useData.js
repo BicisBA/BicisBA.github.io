@@ -25,6 +25,8 @@ const getAPITransporte = async (endpoint) => {
 
 const useData = () => {
   const [estaciones, setEstaciones] = React.useState([])
+  const [center, setCenter] = React.useState({ lat: -34.6037, lng: -58.3816 }); // Obeliscou
+  const [topEstaciones, setTopEstaciones] = React.useState([])
 
   useEffect(() => {
     const fetchStationInformation = async () => {
@@ -34,8 +36,16 @@ const useData = () => {
     fetchStationInformation()
   }, [])
 
+  useEffect(() => {
+    // TODO: Update topEstaciones con un KNN de walking distance
+    setTopEstaciones(estaciones.slice(0, 10))
+  }, [center, estaciones, setTopEstaciones])
+
   return {
     estaciones,
+    center,
+    setCenter,
+    topEstaciones,
   };
 };
 
