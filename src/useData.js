@@ -3,9 +3,9 @@ import stationStatusMock from './mocks/stationStatus.json'
 import stationInformationMock from './mocks/stationInformation.json'
 import L from "leaflet";
 
-const API_TRANSPORTE_BASE_URL = 'https://apitransporte.buenosaires.gob.ar/ecobici/gbfs'
-const API_TRANSPORTE_CLIENT_ID = 'xxx'
-const API_TRANSPORTE_SECRET = 'xxx'
+// const API_TRANSPORTE_BASE_URL = 'https://apitransporte.buenosaires.gob.ar/ecobici/gbfs'
+// const API_TRANSPORTE_CLIENT_ID = 'xxx'
+// const API_TRANSPORTE_SECRET = 'xxx'
 
 const getAPITransporte = async (endpoint) => {
   // const res = fetch(
