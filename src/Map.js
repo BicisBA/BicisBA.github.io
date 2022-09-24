@@ -19,6 +19,8 @@ function LeafletPlugins() {
   const { setCenter, geoAllowed, geoLoading } = React.useContext(DataContext);
 
   // If on boot we have geolocation permissions, we set the center on the user's location
+  // En realidad esto hay que cambiarlo para que cada N segundos re-localize al usuario
+  // Como hago para que no cambien las estaciones con mayor ranking?
   useEffect(() => {
     if (geoLoading) return;
     if (geoAllowed === 'granted') {
