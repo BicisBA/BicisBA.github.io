@@ -16,7 +16,19 @@ import './styles.css'
 
 function LeafletPlugins() {
   const map = useMap();
-  const { setCenter } = React.useContext(DataContext);
+  const { setCenter, geoAllowed, geoLoading } = React.useContext(DataContext);
+
+  // If on boot we have geolocation permissions, we set the center on the user's location
+  useEffect(() => {
+    if (geoLoading) return;
+    if (geoAllowed === 'granted') {
+      map.locate().on("locationfound", function (e) {
+        map.flyTo(e.latlng, map.getZoom());
+        setCenter(e.latlng);
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [geoLoading])
 
   // Search Bar
   useEffect(() => {
@@ -36,7 +48,7 @@ function LeafletPlugins() {
   // Locate-me button
   useEffect(() => {
     if (!map) return
-
+    if (geoAllowed === "denied") return;
     const btn = L.easyButton("fa-crosshairs", () => {
       map.locate().on("locationfound", function (e) {
         map.flyTo(e.latlng, map.getZoom());
@@ -45,7 +57,7 @@ function LeafletPlugins() {
     });
     map.addControl(btn);
     return () => map.removeControl(btn);
-  }, [map, setCenter]);
+  }, [map, setCenter, geoAllowed]);
 
   // Set location on tap+hold (mobile) and long-press (desktop)
   useEffect(() => {
