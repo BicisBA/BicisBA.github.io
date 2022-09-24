@@ -40,11 +40,12 @@ function LeafletPlugins() {
     const btn = L.easyButton("fa-crosshairs", () => {
       map.locate().on("locationfound", function (e) {
         map.flyTo(e.latlng, map.getZoom());
+        setCenter(e.latlng);
       });
     });
     map.addControl(btn);
     return () => map.removeControl(btn);
-  }, [map]);
+  }, [map, setCenter]);
 
   // Set location on tap+hold (mobile) and long-press (desktop)
   useEffect(() => {
