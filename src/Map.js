@@ -16,6 +16,7 @@ import './styles.css'
 
 function LeafletPlugins() {
   const map = useMap();
+  const { setCenter } = React.useContext(DataContext);
 
   // Search Bar
   useEffect(() => {
@@ -44,6 +45,20 @@ function LeafletPlugins() {
     map.addControl(btn);
     return () => map.removeControl(btn);
   }, [map]);
+
+  // Set location on tap+hold (mobile) and long-press (desktop)
+  useEffect(() => {
+    if (!map) return
+    map.on('contextmenu', (e) => setCenter(e.latlng));
+
+    let mousedownInterval
+    map.on('mousedown', (e) => {
+      mousedownInterval = setInterval(() => setCenter(e.latlng), 500);
+    });
+    map.on('mouseup', () => clearInterval(mousedownInterval));
+
+    return () => { map.off('contextmenu'); map.off('mousedown'); map.off('mouseup') };
+  }, [map, setCenter]);
 
   // TO DO: Refresh estaciones button
 
