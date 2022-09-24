@@ -75,8 +75,7 @@ const useData = () => {
         duration,
         ranking
       }
-    }
-    ).sort((a, b) => a.distance - b.distance).slice(0, 7)
+    }).sort((a, b) => a.distance - b.distance).slice(0, 7)
 
     const nearestById = nearest.reduce((acc, station) => {
       acc[station.station_id] = station

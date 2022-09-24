@@ -1,0 +1,22 @@
+.bici-icon {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    background: peachpuff;
+    border: 3px solid lightcoral;
+
+    padding: 5px;
+    border-radius: 50% 0% 50% 0%;
+    font-weight: bold;
+    font-size: large;
+    color: black;
+}
+
+.bici-icon span {
+    margin-right: 5px;
+}
+
+.bici-icon svg {
+    height: 80%;
+}
