@@ -7,7 +7,7 @@ import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import { GeoSearchControl, OpenStreetMapProvider } from "leaflet-geosearch";
 import "leaflet-easybutton/src/easy-button.js";
 import "leaflet-easybutton/src/easy-button.css";
-import L from "leaflet";
+import L, { Point } from "leaflet";
 import "font-awesome/css/font-awesome.min.css";
 import { DataContext } from "./Contexts";
 import { Text } from "@chakra-ui/react";
@@ -109,11 +109,12 @@ function Map() {
       {Object.values(estaciones).map((estacion) => {
         const bicis_disponibles = bicis[estacion.station_id].num_bikes_available
         const icon = BiciIconGen(bicis_disponibles)
+        const offset = new Point(0, -5)
         return (<Marker
           icon={icon}
           opacity={Object.keys(nearestEstaciones).includes(estacion.station_id) ? 1 : 0.4}
           position={[estacion.lat, estacion.lon]} key={estacion.station_id}>
-          <Popup closeButton={false}>
+          <Popup closeButton={false} offset={offset}>
             <Text textAlign={'center'}>
               <strong>{estacion.name} </strong>
               <br />
