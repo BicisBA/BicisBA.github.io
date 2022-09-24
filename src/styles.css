@@ -3,8 +3,12 @@
     align-items: center;
     justify-content: space-between;
 
-    background: peachpuff;
-    border: 3px solid lightcoral;
+    /*
+    Using red.50 and red.300 from chakra's default theme
+    https://chakra-ui.com/docs/styled-system/theme
+    */
+    background: #FFF5F5;
+    border: 3px solid #FC8181;
 
     padding: 5px;
     border-radius: 50% 0% 50% 0%;
