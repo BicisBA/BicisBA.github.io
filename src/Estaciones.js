@@ -38,7 +38,7 @@ function Estaciones() {
 
 
   return (
-    <Box position="absolute" bottom="0" zIndex={1000} w="100%" bg="orange.50" p={4} rounded="lg" borderTop="2px solid orange">
+    <Box position="absolute" bottom="0" zIndex={1000} w="100%" bg="peachpuff" p={4} rounded="lg" borderTop="2px solid lightcoral">
       <Flex direction={'row'} w="100%" justifyContent="space-between" onClick={() => setExpand(!expand)} cursor="pointer" my={2}>
         <Heading display="flex">
           Estaciones
