@@ -66,7 +66,7 @@ function LeafletPlugins() {
 
     let mousedownInterval
     map.on('mousedown', (e) => {
-      mousedownInterval = setInterval(() => setCenter(e.latlng), 500);
+      mousedownInterval = setInterval(() => setCenter(e.latlng), 1000);
     });
     map.on('mouseup', () => clearInterval(mousedownInterval));
 
