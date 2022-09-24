@@ -44,8 +44,11 @@ function LeafletPlugins() {
       searchLabel: 'Dirección',
     });
     map.addControl(searchControl);
-    return () => map.removeControl(searchControl);
-  }, [map]);
+    map.on('geosearch/showlocation', function (e) {
+      setCenter({ lat: e.location.y, lng: e.location.x });
+    });
+    return () => { map.removeControl(searchControl); map.off('geosearch/showlocation'); }
+  }, [map, setCenter]);
 
   // Locate-me button
   useEffect(() => {
