@@ -65,7 +65,11 @@ function LeafletPlugins() {
   useEffect(() => {
     if (!map) return
 
-    const provider = new OpenStreetMapProvider();
+    const provider = new OpenStreetMapProvider({
+      params: {
+        countrycodes: 'ar',
+      }
+    });
     const searchControl = new GeoSearchControl({
       provider,
       style: 'bar',
