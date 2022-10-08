@@ -16,21 +16,28 @@ import './styles.css'
 
 function LeafletPlugins() {
   const map = useMap();
-  const { setCenter, geoAllowed, geoLoading } = React.useContext(DataContext);
+  const { setCenter } = React.useContext(DataContext);
 
-  // If on boot we have geolocation permissions, we set the center on the user's location
-  // En realidad esto hay que cambiarlo para que cada N segundos re-localize al usuario
-  // Como hago para que no cambien las estaciones con mayor ranking?
+  const followUser = React.useCallback(() => {
+    map.locate({
+      watch: true,
+      enableHighAccuracy: true,
+      maximumAge: 15000,
+    }).once("locationfound", (e) => {
+      map.flyTo(e.latlng, 16);
+    }).on('locationfound', (e) => {
+      setCenter(e.latlng)
+    })
+  }, [map, setCenter]);
+
+  const stopFollowingUser = React.useCallback(() => {
+    map.stopLocate().off('locationfound')
+  }, [map]);
+
+  // On boot, we follow the user
   useEffect(() => {
-    if (geoLoading) return;
-    if (geoAllowed === 'granted') {
-      map.locate().on("locationfound", function (e) {
-        map.flyTo(e.latlng, map.getZoom());
-        setCenter(e.latlng);
-      });
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [geoLoading])
+    followUser(map)
+  }, [followUser, map])
 
   // Search Bar
   useEffect(() => {
@@ -43,40 +50,36 @@ function LeafletPlugins() {
       autoClose: true,
       searchLabel: 'Dirección',
     });
+
     map.addControl(searchControl);
     map.on('geosearch/showlocation', function (e) {
+      stopFollowingUser()
       setCenter({ lat: e.location.y, lng: e.location.x });
     });
     return () => { map.removeControl(searchControl); map.off('geosearch/showlocation'); }
-  }, [map, setCenter]);
+  }, [map, setCenter, stopFollowingUser]);
 
   // Locate-me button
   useEffect(() => {
     if (!map) return
-    if (geoAllowed === "denied") return;
     const btn = L.easyButton("fa-crosshairs", () => {
-      map.locate().on("locationfound", function (e) {
-        map.flyTo(e.latlng, map.getZoom());
-        setCenter(e.latlng);
-      });
+      followUser()
     });
     map.addControl(btn);
     return () => map.removeControl(btn);
-  }, [map, setCenter, geoAllowed]);
+  }, [map, setCenter, followUser]);
 
-  // Set location on tap+hold (mobile) and long-press (desktop)
+  // Set location on tap+hold (mobile) and right-click (desktop)
   useEffect(() => {
     if (!map) return
-    map.on('contextmenu', (e) => setCenter(e.latlng));
 
-    let mousedownInterval
-    map.on('mousedown', (e) => {
-      mousedownInterval = setInterval(() => setCenter(e.latlng), 1000);
+    map.on('contextmenu', (e) => {
+      setCenter(e.latlng)
+      stopFollowingUser()
     });
-    map.on('mouseup', () => clearInterval(mousedownInterval));
 
-    return () => { map.off('contextmenu'); map.off('mousedown'); map.off('mouseup') };
-  }, [map, setCenter]);
+    return () => { map.off('contextmenu'); }// map.off('mousedown'); map.off('mouseup') };
+  }, [map, setCenter, stopFollowingUser]);
 
   // TO DO: Refresh estaciones button
 

@@ -37,8 +37,6 @@ const useData = () => {
   const [estaciones, setEstaciones] = React.useState({})
   const [nearestEstaciones, setNearestEstaciones] = React.useState({})
   const [bicis, setBicis] = React.useState({})
-  const [geoLoading, setGeoLoading] = React.useState(true)
-  const [geoAllowed, setGeoAllowed] = React.useState("prompt")
   const [center, setCenter] = React.useState({ lat: -34.6037, lng: -58.3816 }); // Obeliscou
 
   useEffect(() => {
@@ -88,27 +86,12 @@ const useData = () => {
     setNearestEstaciones(nearestById)
   }, [center, estaciones, setNearestEstaciones])
 
-  useEffect(() => {
-    const askGeoLocation = async () => {
-      const result = await navigator.permissions.query({ name: 'geolocation' })
-      setGeoAllowed(result.state);
-      result.addEventListener('change', () => {
-        setGeoAllowed(result.state);
-      });
-    }
-    askGeoLocation()
-    setGeoLoading(false)
-  }, [])
-
-
   return {
     estaciones,
     bicis,
     center,
     setCenter,
     nearestEstaciones,
-    geoAllowed,
-    geoLoading
   };
 };
 
