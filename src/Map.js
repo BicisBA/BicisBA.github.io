@@ -10,13 +10,16 @@ import "leaflet-easybutton/src/easy-button.css";
 import L, { Point } from "leaflet";
 import "font-awesome/css/font-awesome.min.css";
 import { DataContext } from "./Contexts";
-import { Text } from "@chakra-ui/react";
+import { Text, useToast } from "@chakra-ui/react";
 
 import './styles.css'
 import { CABA_BOUNDS, OBELISCOU } from "./Constants";
 
 function LeafletPlugins() {
   const map = useMap();
+  const toast = useToast()
+  const id = 'non-caba-toast'
+
   const { setCenter } = React.useContext(DataContext);
 
   const changeCenter = React.useCallback((latlng) => {
@@ -25,9 +28,17 @@ function LeafletPlugins() {
       setCenter(latlng);
       return true
     } else {
+      if (!toast.isActive(id)) {
+        toast({
+          id,
+          isClosable: true,
+          status: 'warning',
+          description: 'Perdón, el servicio de ecobici solo esta disponible en CABA.\nQuejate con Larreta!',
+        })
+      }
       return false
     }
-  }, [setCenter]);
+  }, [setCenter, toast]);
 
   const followUser = React.useCallback(() => {
     map.locate({
