@@ -38,9 +38,7 @@ const useData = () => {
   const [estaciones, setEstaciones] = React.useState({})
   const [nearestEstaciones, setNearestEstaciones] = React.useState({})
   const [bicis, setBicis] = React.useState({})
-  const [center, setCenter] = React.useState(
-    OBELISCOU
-  );
+  const [center, setCenter] = React.useState(OBELISCOU);
 
   useEffect(() => {
     const fetchStationInformation = async () => {
@@ -55,7 +53,8 @@ const useData = () => {
       const bicisByStationId = await fetchAPITransporte('stationStatus')
       setBicis(bicisByStationId)
     }
-    fetchBicis() // We call it on boot, and then set a timer to call it every 30 seconds
+    fetchBicis()
+    // We call it on boot, and then set a timer to call it every 30 seconds
     const interval = setInterval(fetchBicis, 30000);
 
     return () => clearInterval(interval);
