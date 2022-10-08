@@ -13,10 +13,21 @@ import { DataContext } from "./Contexts";
 import { Text } from "@chakra-ui/react";
 
 import './styles.css'
+import { CABA_BOUNDS, OBELISCOU } from "./Constants";
 
 function LeafletPlugins() {
   const map = useMap();
   const { setCenter } = React.useContext(DataContext);
+
+  const changeCenter = React.useCallback((latlng) => {
+    const caba = L.latLngBounds(CABA_BOUNDS);
+    if (caba.contains(latlng)) {
+      setCenter(latlng);
+      return true
+    } else {
+      return false
+    }
+  }, [setCenter]);
 
   const followUser = React.useCallback(() => {
     map.locate({
@@ -26,9 +37,9 @@ function LeafletPlugins() {
     }).once("locationfound", (e) => {
       map.flyTo(e.latlng, 16);
     }).on('locationfound', (e) => {
-      setCenter(e.latlng)
+      changeCenter(e.latlng)
     })
-  }, [map, setCenter]);
+  }, [map, changeCenter]);
 
   const stopFollowingUser = React.useCallback(() => {
     map.stopLocate().off('locationfound')
@@ -49,15 +60,18 @@ function LeafletPlugins() {
       style: 'bar',
       autoClose: true,
       searchLabel: 'Dirección',
+      updateMap: false,
     });
 
     map.addControl(searchControl);
     map.on('geosearch/showlocation', function (e) {
-      stopFollowingUser()
-      setCenter({ lat: e.location.y, lng: e.location.x });
+      if (changeCenter({ lat: e.location.y, lng: e.location.x })) {
+        map.flyTo({ lat: e.location.y, lng: e.location.x }, 16);
+        stopFollowingUser()
+      };
     });
     return () => { map.removeControl(searchControl); map.off('geosearch/showlocation'); }
-  }, [map, setCenter, stopFollowingUser]);
+  }, [map, changeCenter, stopFollowingUser]);
 
   // Locate-me button
   useEffect(() => {
@@ -67,19 +81,20 @@ function LeafletPlugins() {
     });
     map.addControl(btn);
     return () => map.removeControl(btn);
-  }, [map, setCenter, followUser]);
+  }, [map, followUser]);
 
   // Set location on tap+hold (mobile) and right-click (desktop)
   useEffect(() => {
     if (!map) return
 
     map.on('contextmenu', (e) => {
-      setCenter(e.latlng)
-      stopFollowingUser()
+      if (changeCenter(e.latlng)) {
+        stopFollowingUser()
+      }
     });
 
     return () => { map.off('contextmenu'); }// map.off('mousedown'); map.off('mouseup') };
-  }, [map, setCenter, stopFollowingUser]);
+  }, [map, changeCenter, stopFollowingUser]);
 
   // TO DO: Refresh estaciones button
 
@@ -103,8 +118,8 @@ function Map() {
 
   return (
     <MapContainer
-      center={{ lat: -34.6037, lng: -58.3816 }} // Obelisco
-      maxBounds={[[-34.524197, -58.552391], [-34.715765, -58.265415]]} // A manopla
+      center={OBELISCOU}
+      maxBounds={CABA_BOUNDS}
       maxBoundsViscosity={0.9}
       zoom={17}
       minZoom={13}

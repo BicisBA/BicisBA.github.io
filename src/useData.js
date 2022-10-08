@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import stationStatusMock from './mocks/stationStatus.json'
 import stationInformationMock from './mocks/stationInformation.json'
 import L from "leaflet";
+import { OBELISCOU } from "./Constants";
 
 // const API_TRANSPORTE_BASE_URL = 'https://apitransporte.buenosaires.gob.ar/ecobici/gbfs'
 // const API_TRANSPORTE_CLIENT_ID = 'xxx'
@@ -37,7 +38,9 @@ const useData = () => {
   const [estaciones, setEstaciones] = React.useState({})
   const [nearestEstaciones, setNearestEstaciones] = React.useState({})
   const [bicis, setBicis] = React.useState({})
-  const [center, setCenter] = React.useState({ lat: -34.6037, lng: -58.3816 }); // Obeliscou
+  const [center, setCenter] = React.useState(
+    OBELISCOU
+  );
 
   useEffect(() => {
     const fetchStationInformation = async () => {
