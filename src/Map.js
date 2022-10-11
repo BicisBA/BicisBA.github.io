@@ -33,7 +33,7 @@ function LeafletPlugins() {
           id,
           isClosable: true,
           status: 'warning',
-          description: 'Perdón, el servicio de ecobici solo esta disponible en CABA.\nQuejate con Larreta!',
+          description: 'Perdón, el servicio de ecobici solo esta disponible en CABA',
         })
       }
       return false
