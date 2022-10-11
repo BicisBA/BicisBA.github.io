@@ -36,7 +36,7 @@ function Result({ station_id }) {
         {color !== 'green' && (<PopoverBody>
           Nuestro algoritmo dice que te conviene salir en
           <br />
-          <strong>{Math.round(eta, 1)} minutos</strong> a esta estación
+          <strong>{Math.round(eta, 1)} {Math.round(eta, 1) === 1 ? 'minuto' : 'minutos'}</strong> a esta estación
         </PopoverBody>)}
       </PopoverContent>
     </Popover >
