@@ -5,27 +5,61 @@ import {
   StatHelpText,
   Divider,
   Icon,
+  Badge,
+  PopoverBody,
+  Popover,
+  PopoverArrow,
+  PopoverHeader,
+  PopoverContent,
+  PopoverTrigger,
 } from "@chakra-ui/react";
 import React from "react";
+import { RESULTS } from "./Constants";
 import { DataContext } from "./Contexts";
 
-function Estacion({ estacion }) {
-  const { estaciones, bicis } = React.useContext(DataContext);
-  const bicis_disponibles = bicis[estacion.station_id].num_bikes_available
+function Result({ station_id }) {
+  const { nearestEstaciones } = React.useContext(DataContext);
+  const { color, probability, eta } = nearestEstaciones[station_id]
+
+  return (
+    <Popover placement="top" trigger="hover">
+      <PopoverTrigger>
+        <Badge colorScheme={color} cursor="pointer">{RESULTS[color].badgeText}</Badge>
+      </PopoverTrigger>
+      <PopoverContent width="fit-content" textAlign="center" borderWidth="2px" borderColor="gray.500" bg="gray.50">
+        <PopoverArrow bg="gray.500" />
+        <PopoverHeader>
+          Hay un <strong>{Math.round(probability * 100, 2)}%</strong> de chances de que consigas
+          <br />
+          una bici cuando llegues a la estación
+        </PopoverHeader>
+        {color !== 'green' && (<PopoverBody>
+          Nuestro algoritmo dice que te conviene salir en
+          <br />
+          <strong>{Math.round(eta, 1)} minutos</strong> a esta estación
+        </PopoverBody>)}
+      </PopoverContent>
+    </Popover >
+  )
+}
+
+function Estacion({ station_id }) {
+  const { estaciones, bicis, nearestEstaciones } = React.useContext(DataContext);
+  const estacion = estaciones[station_id];
+  const bicis_disponibles = bicis[station_id]?.num_bikes_available
 
   return (
     <>
-      <Flex direction={'row'} justifyContent="space-between">
+      <Flex direction={'row'} justifyContent="space-between" my={1}>
         <Stat size="sm" textAlign="left">
-          <StatNumber>{estaciones[estacion.station_id].name}</StatNumber>
-          <StatHelpText>Estación a {Math.round(estacion.distance, 2)}m</StatHelpText>
+          <StatNumber>{estacion.name.split('-')[1]}</StatNumber>
+          <StatHelpText m={0}>Estación a {Math.round(nearestEstaciones[station_id].distance, 2)} metros</StatHelpText>
         </Stat>
 
-        <Stat size="sm" textAlign="right">
-          <StatNumber>{bicis_disponibles}</StatNumber>
-          <StatHelpText>{bicis_disponibles === 1 ? 'Bicicleta' : 'Bicicletas'}</StatHelpText>
-        </Stat>
-
+        {!isNaN(bicis_disponibles) && <Stat size="sm" textAlign="right">
+          <Result station_id={station_id} />
+          <StatHelpText m={0}><strong>{bicis_disponibles} </strong>{bicis_disponibles === 1 ? 'bicicleta' : 'bicicletas'} ahora mismo</StatHelpText>
+        </Stat>}
       </Flex>
       <Divider />
     </>
@@ -36,9 +70,8 @@ function Estaciones() {
   const [expand, setExpand] = React.useState(false)
   const { nearestEstaciones } = React.useContext(DataContext);
 
-
   return (
-    <Box position="absolute" bottom="0" zIndex={1000} w="100%" bg="red.50" p={4} rounded="lg" borderTop="2px solid" borderColor="red.300">
+    <Box position="absolute" bottom="0" zIndex={1000} w="100%" bg="gray.50" p={4} rounded="lg" borderTop="2px solid" borderColor="gray.400">
       <Flex direction={'row'} w="100%" justifyContent="space-between" onClick={() => setExpand(!expand)} cursor="pointer" my={2}>
         <Heading display="flex">
           Estaciones
@@ -50,9 +83,9 @@ function Estaciones() {
       </Flex>
 
       <Collapse startingHeight={50} in={expand}>
-        {Object.values(nearestEstaciones).sort((a, b) => a.ranking - b.ranking).map((estacion) => (
-          <Estacion estacion={estacion} key={estacion.station_id} />))
-        }
+        {Object.values(nearestEstaciones).map(({ station_id }) => (
+          <Estacion station_id={station_id} key={station_id} />
+        ))}
       </Collapse>
     </Box>
   );
