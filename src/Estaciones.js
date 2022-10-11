@@ -70,6 +70,23 @@ function Estaciones() {
   const [expand, setExpand] = React.useState(false)
   const { nearestEstaciones } = React.useContext(DataContext);
 
+  const spaceBar = React.useCallback(
+    (event) => {
+      if (event.keyCode === 32) {
+        setExpand(!expand);
+      }
+    },
+    [expand]
+  );
+
+  React.useEffect(() => {
+    document.addEventListener("keydown", spaceBar, false);
+
+    return () => {
+      document.removeEventListener("keydown", spaceBar, false);
+    };
+  }, [spaceBar]);
+
   return (
     <Box position="absolute" bottom="0" zIndex={1000} w="100%" bg="gray.50" p={4} rounded="lg" borderTop="2px solid" borderColor="gray.400">
       <Flex direction={'row'} w="100%" justifyContent="space-between" onClick={() => setExpand(!expand)} cursor="pointer" my={2}>
