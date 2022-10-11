@@ -24,8 +24,8 @@ const postBackend = async (endpoint, body) => {
 }
 
 const getColor = (probability) => {
-  if (probability >= 0.7) return 'green'
-  else if (probability >= 0.3) return 'yellow'
+  if (probability >= 0.6) return 'green'
+  else if (probability >= 0.2) return 'yellow'
   else return 'red'
 }
 
@@ -92,7 +92,7 @@ const useData = () => {
         station_id: estacion.station_id,
         distance,
       }
-    }).sort((a, b) => a.distance - b.distance).slice(0, 7)
+    }).sort((a, b) => a.distance - b.distance).slice(0, 5)
     addRankings(nearest)
   }, [center, estaciones, setNearestEstaciones])
 
