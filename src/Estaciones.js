@@ -31,7 +31,7 @@ function Result({ station_id }) {
         <PopoverHeader>
           Hay un <strong>{Math.round(probability * 100, 2)}%</strong> de chances de que consigas
           <br />
-          una bici cuando llegues a la estación
+          una bici saliendo ahora
         </PopoverHeader>
         {color !== 'green' && (<PopoverBody>
           Nuestro algoritmo dice que te conviene salir en
