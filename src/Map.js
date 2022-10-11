@@ -141,7 +141,7 @@ function Map() {
       maxZoom={18}
       style={{ height: "100vh", width: "100vw" }}
     >
-      <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+      <TileLayer url="https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png" />
       {Object.values(estaciones).map((estacion) => {
         const bicis_disponibles = bicis[estacion.station_id].num_bikes_available
         const icon = BiciIconGen(bicis_disponibles)
