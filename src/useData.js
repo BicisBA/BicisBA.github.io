@@ -72,13 +72,12 @@ const useData = () => {
         return {
           ...estacion,
           user_eta,
-          sortRanking: bike_availability_probability,
           eta: bike_eta >= user_eta ? bike_eta - user_eta : user_eta,
           probability: bike_availability_probability,
           color: getColor(bike_availability_probability),
         }
       }))
-      const nearestById = nearest_with_ranking.sort((a, b) => a.sortRanking - b.sortRanking).reduce((acc, station) => {
+      const nearestById = nearest_with_ranking.reduce((acc, station) => {
         acc[station.station_id] = station
         return acc
       }, {})

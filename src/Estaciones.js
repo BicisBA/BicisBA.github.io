@@ -100,7 +100,13 @@ function Estaciones() {
       </Flex>
 
       <Collapse startingHeight={50} in={expand}>
-        {Object.values(nearestEstaciones).map(({ station_id }) => (
+        {Object.values(nearestEstaciones).sort((a, b) => {
+          const groupOrder = ['green', 'yellow', 'red']
+          if (a.color === b.color) {
+            return a.distance - b.distance
+          }
+          return groupOrder.indexOf(a.color) - groupOrder.indexOf(b.color)
+        }).map(({ station_id }) => (
           <Estacion station_id={station_id} key={station_id} />
         ))}
       </Collapse>
