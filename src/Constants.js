@@ -4,12 +4,12 @@ export const BACKEND = 'https://bicisba-frame.herokuapp.com'
 
 export const RESULTS = {
     green: {
-        badgeText: "Anda sin miedo",
+        badgeText: "Vas a conseguir una bici",
     },
     yellow: {
-        badgeText: "Ojo, tal vez no haya bicis cuando llegues",
+        badgeText: "Tal vez no queden bicis",
     },
     red: {
-        badgeText: "Mejor no vayas",
+        badgeText: "Vas a tener que esperar",
     }
 }

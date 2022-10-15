@@ -28,16 +28,17 @@ function Result({ station_id }) {
       </PopoverTrigger>
       <PopoverContent width="fit-content" textAlign="center" borderWidth="2px" borderColor="gray.500" bg="gray.50">
         <PopoverArrow bg="gray.500" />
-        <PopoverHeader>
+        {color !== 'green' && (
+          <PopoverHeader>
+            Te conviene salir en <strong>{Math.round(eta, 1)} {Math.round(eta, 1) === 1 ? 'minuto' : 'minutos'}</strong>
+          </PopoverHeader>
+        )}
+
+        <PopoverBody>
           Hay un <strong>{Math.round(probability * 100, 2)}%</strong> de chances de que consigas
           <br />
-          una bici cuando llegues a la estación
-        </PopoverHeader>
-        {color !== 'green' && (<PopoverBody>
-          Nuestro algoritmo dice que te conviene salir en
-          <br />
-          <strong>{Math.round(eta, 1)} {Math.round(eta, 1) === 1 ? 'minuto' : 'minutos'}</strong> a esta estación
-        </PopoverBody>)}
+          una bici saliendo ahora
+        </PopoverBody>
       </PopoverContent>
     </Popover >
   )
