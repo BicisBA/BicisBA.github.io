@@ -34,7 +34,7 @@ function Result({ station_id }) {
           </PopoverHeader>
         )}
 
-        <PopoverBody>
+        <PopoverBody px={2} py={1}>
           Hay un <strong>{Math.round(probability * 100, 2)}%</strong> de chances de que consigas
           <br />
           una bici saliendo ahora
@@ -89,7 +89,7 @@ function Estaciones() {
   }, [spaceBar]);
 
   return (
-    <Box position="absolute" bottom="0" zIndex={1000} w="100%" bg="gray.50" p={4} rounded="lg" borderTop="2px solid" borderColor="gray.400">
+    <Box position="absolute" bottom="0" zIndex={1000} w="100%" bg="gray.50" pt={4} px={4} rounded="lg" borderTop="2px solid" borderColor="gray.400">
       <Flex direction={'row'} w="100%" justifyContent="space-between" onClick={() => setExpand(!expand)} cursor="pointer" my={2}>
         <Heading display="flex">
           Estaciones
@@ -100,7 +100,7 @@ function Estaciones() {
         {expand ? <ArrowRightIcon transform="rotate(90deg)" boxSize={8} /> : <ArrowLeftIcon transform="rotate(90deg)" boxSize={8} />}
       </Flex>
 
-      <Collapse startingHeight={50} in={expand}>
+      <Collapse startingHeight={62} in={expand}>
         {Object.values(nearestEstaciones).sort((a, b) => {
           const groupOrder = ['green', 'yellow', 'red']
           if (a.color === b.color) {
