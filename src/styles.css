@@ -1,8 +1,9 @@
 .bici-icon {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    padding: 5px;
+    justify-content: space-around;
+    padding: 4px;
+    gap: 4px;
     opacity: 0.6;
     width: 55px !important;
     height: 40px !important;
@@ -35,10 +36,6 @@ Using colors from chakra's default theme: gray, red, yellow, green
     opacity: 1;
     background: #FFF5F5;
     border: 3px solid #FC8181;
-}
-
-.bici-icon span {
-    margin-right: 5px;
 }
 
 .bici-icon svg {
