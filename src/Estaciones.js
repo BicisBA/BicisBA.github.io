@@ -26,8 +26,8 @@ function Result({ station_id }) {
       <PopoverTrigger>
         <Badge colorScheme={color} cursor="pointer">{RESULTS[color].badgeText}</Badge>
       </PopoverTrigger>
-      <PopoverContent width="fit-content" textAlign="center" borderWidth="2px" borderColor="gray.500" bg="gray.50">
-        <PopoverArrow bg="gray.500" />
+      <PopoverContent width="fit-content" textAlign="center" borderWidth="2px" borderColor="brown.500" bg="brown.50">
+        <PopoverArrow bg="brown.500" />
         {color !== 'green' && (
           <PopoverHeader>
             Te conviene salir en <strong>{Math.round(eta, 1)} {Math.round(eta, 1) === 1 ? 'minuto' : 'minutos'}</strong>
@@ -89,7 +89,7 @@ function Estaciones() {
   }, [spaceBar]);
 
   return (
-    <Box position="absolute" bottom="0" zIndex={1000} w="100%" bg="gray.50" pt={4} px={4} rounded="lg" borderTop="2px solid" borderColor="gray.400">
+    <Box position="absolute" color="black" bottom="0" zIndex={1000} w="100%" bg="brown.50" pt={4} px={4} rounded="lg" borderTop="2px solid" borderColor="brown.400">
       <Flex direction={'row'} w="100%" justifyContent="space-between" onClick={() => setExpand(!expand)} cursor="pointer" my={2}>
         <Heading display="flex">
           Estaciones
