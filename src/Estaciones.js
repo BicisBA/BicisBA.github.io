@@ -23,7 +23,7 @@ function Result({ station_id }) {
   const { color, probability, eta } = nearestEstaciones[station_id]
 
   return (
-    <Popover placement="left" trigger="hover">
+    <Popover placement="bottom-start" trigger="hover" strategy="fixed">
       <PopoverTrigger>
         <Badge colorScheme={color} cursor="pointer">{RESULTS[color].badgeText}</Badge>
       </PopoverTrigger>
