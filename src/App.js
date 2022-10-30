@@ -1,12 +1,12 @@
 import React from 'react';
 import {
   ChakraProvider,
-  theme,
 } from '@chakra-ui/react';
 import Map from './Map';
 import Estaciones from './Estaciones';
 import useData from "./useData";
 import { DataContext } from "./Contexts"
+import theme from './theme';
 
 function App() {
   const dataHook = useData();

@@ -12,30 +12,26 @@
     font-size: large;
     color: black;
 
-    background: #F7FAFC;
-    border: 3px solid #A0AEC0;
+    background: var(--chakra-colors-gray-50);
+    border: 3px solid var(--chakra-colors-gray-300);
 }
 
-/*
-Using colors from chakra's default theme: gray, red, yellow, green
- https: //chakra-ui.com/docs/styled-system/theme
-*/
 .bici-icon.green {
     opacity: 1;
-    background: #F0FFF4;
-    border: 3px solid #9AE6B4;
+    background: var(--chakra-colors-green-50);
+    border: 3px solid var(--chakra-colors-green-300);
 }
 
 .bici-icon.yellow {
     opacity: 1;
-    background: #FFFFF0;
-    border: 3px solid #FBD38D;
+    background: var(--chakra-colors-yellow-50);
+    border: 3px solid var(--chakra-colors-yellow-300);
 }
 
 .bici-icon.red {
     opacity: 1;
-    background: #FFF5F5;
-    border: 3px solid #FC8181;
+    background: var(--chakra-colors-red-50);
+    border: 3px solid var(--chakra-colors-red-300);
 }
 
 .bici-icon svg {
