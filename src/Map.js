@@ -120,7 +120,6 @@ function Map() {
   const { estaciones, center, setCenter, nearestEstaciones, bicis } = React.useContext(DataContext);
 
   const BiciIconGen = (n, color = undefined) => new L.DivIcon({
-    iconSize: isNaN(n) ? [40, 40] : [55, 40],
     className: `bici-icon ${color}`,
     html: `
       ${isNaN(n) ? '' : `<span>${n}</span>`}
@@ -150,7 +149,6 @@ function Map() {
         const offset = new Point(0, -5)
         return (<Marker
           icon={icon}
-          opacity={isNear ? 1 : 0.4}
           position={[estacion.lat, estacion.lon]} key={station_id}>
           <Popup closeButton={false} offset={offset}>
             <Text textAlign={'center'}>
