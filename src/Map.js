@@ -129,6 +129,15 @@ function Map() {
     `
   })
 
+  const CurrentLocationMarker = new L.DivIcon({
+    iconSize: [20, 20],
+    html: `
+    <span class="point">
+      <span class="pulse"></span>
+    </span>
+    `
+  })
+
   return (
     <MapContainer
       center={OBELISCOU}
@@ -157,7 +166,7 @@ function Map() {
           </Popup>
         </Marker>)
       })}
-      <Marker position={center} draggable={true}
+      <Marker icon={CurrentLocationMarker} position={center} draggable={true}
         eventHandlers={{
           moveend: (e) => {
             setCenter(e.target.getLatLng());
