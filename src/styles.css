@@ -37,3 +37,51 @@
 .bici-icon svg {
     height: 80%;
 }
+
+.leaflet-marker-icon {
+    background: none;
+    border: none;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(0.5);
+        opacity: .5;
+    }
+
+    50% {
+        opacity: .7;
+    }
+
+    85% {
+        transform: scale(3);
+    }
+
+    100% {
+        transform: scale(3);
+        opacity: 0;
+    }
+}
+
+
+.point {
+    background: var(--chakra-colors-blue-300);
+    border: 2px solid var(--chakra-colors-blue-500);
+    height: 100%;
+    width: 100%;
+    display: block;
+    border-radius: 50%;
+    position: absolute;
+}
+
+.pulse {
+    border: 1px solid var(--chakra-colors-blue-400);
+    display: block;
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    z-index: -1;
+    animation: pulse 2s ease-in-out infinite;
+    border-radius: 50%;
+    box-shadow: var(--chakra-colors-blue-400) 0px 0px 3px 0px;
+}
