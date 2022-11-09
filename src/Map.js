@@ -120,7 +120,7 @@ function Map() {
   const { estaciones, center, setCenter, nearestEstaciones, bicis } = React.useContext(DataContext);
 
   const BiciIconGen = (n, color = undefined) => new L.DivIcon({
-    className: `bici-icon ${color}`,
+    className: `bici-icon ${color || 'gray'}`,
     html: `
       ${isNaN(n) ? '' : `<span>${n}</span>`}
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512">

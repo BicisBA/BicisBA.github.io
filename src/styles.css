@@ -4,14 +4,16 @@
     justify-content: space-around;
     padding: 4px;
     gap: 4px;
-    opacity: 0.6;
     width: 55px !important;
     height: 40px !important;
     border-radius: 50% 0% 50% 0%;
     font-weight: bold;
     font-size: large;
     color: black;
+}
 
+.bici-icon.gray {
+    opacity: 0.6;
     background: var(--chakra-colors-gray-50);
     border: 3px solid var(--chakra-colors-gray-300);
 }
