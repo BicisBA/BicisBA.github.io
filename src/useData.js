@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import L from "leaflet";
-import { BACKEND, OBELISCOU } from "./Constants";
+import { BACKEND, OBELISCOU, CABA_BOUNDS } from "./Constants";
 
 const getBackend = async (endpoint) => {
   const data = await fetch(`${BACKEND}/${endpoint}`);
@@ -95,12 +95,18 @@ const useData = () => {
     addRankings(nearest)
   }, [center, estaciones, setNearestEstaciones])
 
+  const isInBounds = (latlng) => {
+    const caba = L.latLngBounds(CABA_BOUNDS);
+    return caba.contains(latlng);
+  }
+
   return {
     estaciones,
     bicis,
     center,
     setCenter,
     nearestEstaciones,
+    isInBounds,
   };
 };
 

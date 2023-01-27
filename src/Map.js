@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect } from "react";
 import 'leaflet/dist/leaflet.css';
 import 'leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.webpack.css';
@@ -20,25 +21,28 @@ function LeafletPlugins() {
   const toast = useToast()
   const id = 'non-caba-toast'
 
-  const { setCenter } = React.useContext(DataContext);
+  const { setCenter, isInBounds } = React.useContext(DataContext);
+
+  const outOfBoundsToast = React.useCallback(() => {
+    if (!toast.isActive(id)) {
+      toast({
+        id,
+        isClosable: true,
+        status: 'warning',
+        description: 'Perdón, el servicio de ecobici solo esta disponible en CABA',
+      })
+    }
+  }, [])
 
   const changeCenter = React.useCallback((latlng) => {
-    const caba = L.latLngBounds(CABA_BOUNDS);
-    if (caba.contains(latlng)) {
+    if (isInBounds(latlng)) {
       setCenter(latlng);
       return true
     } else {
-      if (!toast.isActive(id)) {
-        toast({
-          id,
-          isClosable: true,
-          status: 'warning',
-          description: 'Perdón, el servicio de ecobici solo esta disponible en CABA',
-        })
-      }
+      outOfBoundsToast()
       return false
     }
-  }, [setCenter, toast]);
+  }, []);
 
   const followUser = React.useCallback(() => {
     map.locate({
@@ -46,11 +50,15 @@ function LeafletPlugins() {
       enableHighAccuracy: true,
       maximumAge: 15000,
     }).once("locationfound", (e) => {
-      map.flyTo(e.latlng, 16);
+      if (isInBounds(e.latlng)) {
+        map.flyTo(e.latlng, 16);
+      } else {
+        outOfBoundsToast()
+      }
     }).on('locationfound', (e) => {
       changeCenter(e.latlng)
     })
-  }, [map, changeCenter]);
+  }, [map]);
 
   const stopFollowingUser = React.useCallback(() => {
     map.stopLocate().off('locationfound')
@@ -59,7 +67,7 @@ function LeafletPlugins() {
   // On boot, we follow the user
   useEffect(() => {
     followUser(map)
-  }, [followUser, map])
+  }, [map])
 
   // Search Bar
   useEffect(() => {
