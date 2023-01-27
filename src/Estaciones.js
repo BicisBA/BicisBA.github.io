@@ -74,6 +74,9 @@ function Estaciones() {
 
   const spaceBar = React.useCallback(
     (event) => {
+      if (event.target.tagName.toLowerCase() === 'input') {
+        return
+      }
       if (event.keyCode === 32) {
         setExpand(!expand);
       }
