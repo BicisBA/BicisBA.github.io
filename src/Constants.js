@@ -1,4 +1,4 @@
-export const CABA_BOUNDS = [[-34.524197, -58.552391], [-34.715765, -58.265415]] // A manopla
+export const CABA_BOUNDS = [[-34.5265535, -58.5314494], [-34.705637, -58.3351423]] // A manopla
 export const OBELISCOU = { lat: -34.6037, lng: -58.3816 }
 export const BACKEND = 'https://frame.crossnox.dev'
 
