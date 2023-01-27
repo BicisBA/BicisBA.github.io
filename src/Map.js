@@ -174,7 +174,7 @@ function Map() {
           </Popup>
         </Marker>)
       })}
-      <Marker icon={CurrentLocationMarker} position={center} draggable={true}
+      <Marker icon={CurrentLocationMarker} position={center}
         eventHandlers={{
           moveend: (e) => {
             setCenter(e.target.getLatLng());
