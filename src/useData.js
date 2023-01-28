@@ -32,21 +32,30 @@ const getColor = (probability) => {
 const useData = () => {
   const [estaciones, setEstaciones] = React.useState({})
   const [nearestEstaciones, setNearestEstaciones] = React.useState({})
+  const [backendDead, setBackendDead] = React.useState(false);
   const [bicis, setBicis] = React.useState({})
   const [center, setCenter] = React.useState(OBELISCOU);
 
   useEffect(() => {
     const fetchStationInformation = async () => {
-      const stationsById = await getBackend('stations')
-      setEstaciones(stationsById)
+      try {
+        const stationsById = await getBackend('stations')
+        setEstaciones(stationsById)
+      } catch (e) {
+        setBackendDead(true)
+      }
     }
     fetchStationInformation()
   }, [])
 
   useEffect(() => {
     const fetchBicis = async () => {
-      const bicisByStationId = await getBackend('stations/status')
-      setBicis(bicisByStationId)
+      try {
+        const bicisByStationId = await getBackend('stations/status')
+        setBicis(bicisByStationId)
+      } catch (e) {
+        setBackendDead(true)
+      }
     }
     fetchBicis()
     // We call it on boot, and then set a timer to call it every 30 seconds
@@ -106,6 +115,7 @@ const useData = () => {
     center,
     setCenter,
     nearestEstaciones,
+    backendDead,
     isInBounds,
   };
 };

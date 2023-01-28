@@ -1,4 +1,4 @@
-import { ArrowLeftIcon, ArrowRightIcon } from "@chakra-ui/icons";
+import { ArrowLeftIcon, ArrowRightIcon, ExternalLinkIcon } from "@chakra-ui/icons";
 import {
   Box, Collapse, Flex, Heading, Stat,
   StatNumber,
@@ -13,6 +13,10 @@ import {
   PopoverContent,
   PopoverTrigger,
   Link,
+  Alert,
+  AlertIcon,
+  AlertTitle,
+  AlertDescription,
 } from "@chakra-ui/react";
 import React from "react";
 import { RESULTS } from "./Constants";
@@ -70,7 +74,7 @@ function Estacion({ station_id }) {
 
 function Estaciones() {
   const [expand, setExpand] = React.useState(false)
-  const { nearestEstaciones } = React.useContext(DataContext);
+  const { nearestEstaciones, backendDead } = React.useContext(DataContext);
 
   const spaceBar = React.useCallback(
     (event) => {
@@ -105,6 +109,21 @@ function Estaciones() {
       </Flex>
 
       <Collapse startingHeight={62} in={expand}>
+        {backendDead &&
+          (
+            <Flex px={4} direction={'row'} justifyContent="space-between" my={1}>
+              <Alert status="error">
+                <AlertIcon />
+                <AlertTitle>El servicio BicisBA no esta disponible en este momento.</AlertTitle>
+                <AlertDescription>
+                  Si este error persiste, reportalo
+                  <Link isExternal={true} href="https://github.com/BicisBA/BicisBA.github.io/issues">
+                    <ExternalLinkIcon ml={1} />
+                  </Link>
+                </AlertDescription>
+              </Alert>
+            </Flex>
+          )}
         {Object.values(nearestEstaciones).sort((a, b) => {
           const groupOrder = ['green', 'yellow', 'red']
           if (a.color === b.color) {
