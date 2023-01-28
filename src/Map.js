@@ -125,7 +125,7 @@ function LeafletPlugins() {
 }
 
 function Map() {
-  const { estaciones, center, setCenter, nearestEstaciones, bicis } = React.useContext(DataContext);
+  const { estaciones, center, nearestEstaciones, bicis } = React.useContext(DataContext);
 
   const BiciIconGen = (n, color = undefined) => new L.DivIcon({
     className: `bici-icon ${color || 'gray'}`,
@@ -174,14 +174,7 @@ function Map() {
           </Popup>
         </Marker>)
       })}
-      <Marker icon={CurrentLocationMarker} position={center}
-        eventHandlers={{
-          moveend: (e) => {
-            setCenter(e.target.getLatLng());
-          },
-        }}
-      >
-      </Marker>
+      <Marker icon={CurrentLocationMarker} position={center} />
       <LeafletPlugins />
 
     </MapContainer>
