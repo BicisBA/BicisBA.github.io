@@ -11,7 +11,7 @@ import "leaflet-easybutton/src/easy-button.css";
 import L, { Point } from "leaflet";
 import "font-awesome/css/font-awesome.min.css";
 import { DataContext } from "./Contexts";
-import { Text, useToast } from "@chakra-ui/react";
+import { Divider, Text, useToast } from "@chakra-ui/react";
 
 import './styles.css'
 import { CABA_BOUNDS, OBELISCOU } from "./Constants";
@@ -161,15 +161,23 @@ function Map() {
         const station_id = estacion.station_id
         const isNear = Object.keys(nearestEstaciones).includes(station_id.toString())
         const bicis_disponibles = bicis[station_id]?.num_bikes_available
-        const color = isNear ? nearestEstaciones[station_id].color : undefined
+        const color = nearestEstaciones[station_id]?.color
+        const eta = nearestEstaciones[station_id]?.eta
         const icon = BiciIconGen(bicis_disponibles, color)
-        const offset = new Point(0, -5)
+        const offset = new Point(25, -1)
         return (<Marker
           icon={icon}
           position={[estacion.lat, estacion.lon]} key={station_id}>
           <Popup closeButton={false} offset={offset}>
             <Text textAlign={'center'}>
               <strong>{estacion.name.split('-')[1]}</strong>
+              {isNear && <>
+                <br />
+                {Math.round(nearestEstaciones[station_id].distance, 2)} metros
+                <br />
+                <Divider my={1} />
+                Te conviene salir {color === 'green' ? 'ahora' : `en ${Math.round(eta, 1)} ${Math.round(eta, 1) === 1 ? 'minuto' : 'minutos'}`}
+              </>}
             </Text>
           </Popup>
         </Marker>)
