@@ -35,6 +35,7 @@ const useData = () => {
   const [backendDead, setBackendDead] = React.useState(false);
   const [bicis, setBicis] = React.useState({})
   const [center, setCenter] = React.useState(OBELISCOU);
+  const prevCenter = React.useRef();
 
   useEffect(() => {
     const fetchStationInformation = async () => {
@@ -61,6 +62,14 @@ const useData = () => {
   }, [])
 
   useEffect(() => {
+    // We only update the predictions if we moved at least 200 meters away from our previous location
+    // https://blog.logrocket.com/accessing-previous-props-state-react-hooks/
+    const distance = prevCenter.current ? L.latLng(center).distanceTo(L.latLng(prevCenter.current)) : 201
+    if (distance <= 200) {
+      return
+    }
+    prevCenter.current = center
+
     const addRankings = async (nearest) => {
       // What's going on, in the prediction endpoint?
       // We need to provide the user's ETA to the station (`user_eta`):
