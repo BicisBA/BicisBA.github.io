@@ -50,12 +50,8 @@ const useData = () => {
 
   useEffect(() => {
     const fetchBicis = async () => {
-      try {
-        const bicisByStationId = await getBackend('stations/status')
-        setBicis(bicisByStationId)
-      } catch (e) {
-        setBackendDead(true)
-      }
+      const bicisByStationId = await getBackend('stations/status')
+      setBicis(bicisByStationId)
     }
     fetchBicis()
     // We call it on boot, and then set a timer to call it every 30 seconds
