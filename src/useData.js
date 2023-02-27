@@ -62,6 +62,30 @@ const useData = () => {
 
   useEffect(() => {
     const addRankings = async (nearest) => {
+      // What's going on, in the prediction endpoint?
+      // We need to provide the user's ETA to the station (`user_eta`):
+      //   how many minutes it will take them to walk to the station (we compute this manually)
+      // (The user's location is only sent for analytics reasons, not for the prediction)
+      //
+      // Then, the backend will give us:
+      // - The probability of a bike being available when we get there (`bike_availability_probability`)
+      // - When there will be a new bike available (`bike_eta`)
+      //
+      // So, if we are 10 minutes away from the station and we predict that a
+      //   a new bike will be available in 15 minutes, that means we should start
+      //   walking in 5 minutes.
+      // We provide that value as `leave_at`.
+      //
+      // Considering we are running two independent predictions,
+      //   (what happens when we arrive vs when is the next bike available)
+      //   theres a border case in which this predictions are not coherent
+      //   between each other.
+      // This case would be when the `bike_eta` is less than the`user_eta`,
+      //   (i.e, the next bike will be available earlier than we can get there)
+      // In that case, we tell the user should leave in one minute.
+      //   While this is not entirely accurate, it gives our users a better
+      //   experience than explaining our whole prediction method.
+
       const nearest_with_ranking = await Promise.all(nearest.map(async (estacion) => {
         // Ideally we would ping a service like OSRM to get the walking duration between two points
         // However, OSRM free server only computes driving duration, and there's no free walking duration service
@@ -76,8 +100,7 @@ const useData = () => {
 
         return {
           ...estacion,
-          user_eta,
-          eta: bike_eta >= user_eta ? bike_eta - user_eta : user_eta,
+          leave_at: bike_eta >= user_eta ? bike_eta - user_eta : 1,
           probability: bike_availability_probability,
           color: getColor(bike_availability_probability),
         }

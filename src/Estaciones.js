@@ -24,7 +24,7 @@ import { DataContext } from "./Contexts";
 
 function Result({ station_id }) {
   const { nearestEstaciones } = React.useContext(DataContext);
-  const { color, probability, eta } = nearestEstaciones[station_id]
+  const { color, probability, leave_at } = nearestEstaciones[station_id]
 
   return (
     <Popover placement="bottom-start" trigger="hover" strategy="fixed">
@@ -35,7 +35,7 @@ function Result({ station_id }) {
         <PopoverArrow bg="brown.500" />
         {color !== 'green' && (
           <PopoverHeader>
-            Te conviene salir en <strong>{Math.round(eta, 1)} {Math.round(eta, 1) === 1 ? 'minuto' : 'minutos'}</strong>
+            Te conviene salir en <strong>{Math.round(leave_at, 1)} {Math.round(leave_at, 1) === 1 ? 'minuto' : 'minutos'}</strong>
           </PopoverHeader>
         )}
 
