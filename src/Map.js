@@ -170,7 +170,7 @@ function Map() {
           position={[estacion.lat, estacion.lon]} key={station_id}>
           <Popup closeButton={false} offset={offset}>
             <Text textAlign={'center'}>
-              <strong>{estacion.name.split('-')[1]}</strong>
+              <strong>{estacion.name.toUpperCase().split('-')[1]}</strong>
               {isNear && <>
                 <br />
                 {Math.round(nearestEstaciones[station_id].distance, 2)} metros

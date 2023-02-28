@@ -59,7 +59,7 @@ function Estacion({ station_id }) {
     <>
       <Flex px={4} direction={'row'} justifyContent="space-between" my={1}>
         <Stat size="sm" textAlign="left">
-          <StatNumber>{estacion.name.split('-')[1]}</StatNumber>
+          <StatNumber>{estacion.name.toUpperCase().split('-')[1]}</StatNumber>
           <StatHelpText m={0}>Estación a {Math.round(nearestEstaciones[station_id].distance, 2)} metros</StatHelpText>
         </Stat>
 
