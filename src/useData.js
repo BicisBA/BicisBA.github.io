@@ -100,14 +100,16 @@ const useData = () => {
         // We compute the walking duration, assuming a walking speed of 5km/h (average human speed, with dubious sources)
         const user_eta = (estacion.distance / 1000) * 60 / 5
 
-        const { bike_availability_probability, bike_eta } = await postBackend(`stations/${estacion.station_id}/prediction`, {
+        const prediction = await postBackend(`stations/${estacion.station_id}/prediction`, {
           user_eta,
           user_lat: center.lat,
           user_lon: center.lng,
         })
+        const { bike_availability_probability, bike_eta } = prediction
 
         return {
           ...estacion,
+          ...prediction,
           leave_at: bike_eta >= user_eta ? bike_eta - user_eta : 1,
           probability: bike_availability_probability,
           color: getColor(bike_availability_probability),

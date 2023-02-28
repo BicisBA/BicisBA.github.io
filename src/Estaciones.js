@@ -15,6 +15,7 @@ import {
   Link,
   Alert,
   AlertIcon,
+  Text,
   AlertTitle,
   AlertDescription,
 } from "@chakra-ui/react";
@@ -31,7 +32,6 @@ function Result({ station_id }) {
       <PopoverTrigger>
         <Badge colorScheme={color} cursor="pointer">{RESULTS[color].badgeText}</Badge>
       </PopoverTrigger>
-      <Badge colorScheme={color} variant="solid" ml={1} w="6ch" textAlign={"center"}>{Math.round(probability * 100, 2)}%</Badge>
       <PopoverContent width="fit-content" textAlign="center" borderWidth="2px" borderColor="brown.500" bg="brown.50">
         <PopoverArrow bg="brown.500" />
         {color !== 'green' && (
@@ -50,7 +50,7 @@ function Result({ station_id }) {
   )
 }
 
-function Estacion({ station_id }) {
+function Estacion({ debugMode, station_id }) {
   const { estaciones, bicis, nearestEstaciones } = React.useContext(DataContext);
   const estacion = estaciones[station_id];
   const bicis_disponibles = bicis[station_id]?.num_bikes_available
@@ -59,7 +59,10 @@ function Estacion({ station_id }) {
     <>
       <Flex px={4} direction={'row'} justifyContent="space-between" my={1}>
         <Stat size="sm" textAlign="left">
-          <StatNumber>{estacion.name.toUpperCase().split('-')[1]}</StatNumber>
+          <StatNumber>
+            {estacion.name.toUpperCase().split('-')[1]}
+            {debugMode && <Text ml={1} as="span" color="gray" fontSize="xs">{JSON.stringify(nearestEstaciones[station_id])}</Text>}
+          </StatNumber>
           <StatHelpText m={0}>Estación a {Math.round(nearestEstaciones[station_id].distance, 2)} metros</StatHelpText>
         </Stat>
 
@@ -75,27 +78,30 @@ function Estacion({ station_id }) {
 
 function Estaciones() {
   const [expand, setExpand] = React.useState(false)
+  const [debugMode, setDebugMode] = React.useState(false)
   const { nearestEstaciones, backendDead } = React.useContext(DataContext);
 
-  const spaceBar = React.useCallback(
+  const keyboard = React.useCallback(
     (event) => {
       if (event.target.tagName.toLowerCase() === 'input') {
         return
       }
       if (event.keyCode === 32) {
         setExpand(!expand);
+      } else if (event.key === "d") {
+        setDebugMode(!debugMode);
       }
     },
-    [expand]
+    [expand, debugMode]
   );
 
   React.useEffect(() => {
-    document.addEventListener("keydown", spaceBar, false);
+    document.addEventListener("keydown", keyboard, false);
 
     return () => {
-      document.removeEventListener("keydown", spaceBar, false);
+      document.removeEventListener("keydown", keyboard, false);
     };
-  }, [spaceBar]);
+  }, [keyboard]);
 
   return (
     <Box position="absolute" color="black" bottom="0" zIndex={1000} w="100%" bg="brown.50" pt={4} rounded="lg" borderTop="2px solid" borderColor="brown.400">
@@ -132,7 +138,7 @@ function Estaciones() {
           }
           return groupOrder.indexOf(a.color) - groupOrder.indexOf(b.color)
         }).map(({ station_id }) => (
-          <Estacion station_id={station_id} key={station_id} />
+          <Estacion debugMode={debugMode} station_id={station_id} key={station_id} />
         ))}
         <Flex mr={4} justifyContent="flex-end">
           <Link isExternal={true} href="https://github.com/BicisBA/BicisBA.github.io">
