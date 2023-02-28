@@ -31,6 +31,7 @@ function Result({ station_id }) {
       <PopoverTrigger>
         <Badge colorScheme={color} cursor="pointer">{RESULTS[color].badgeText}</Badge>
       </PopoverTrigger>
+      <Badge colorScheme={color} variant="solid" ml={1} w="6ch" textAlign={"center"}>{Math.round(probability * 100, 2)}%</Badge>
       <PopoverContent width="fit-content" textAlign="center" borderWidth="2px" borderColor="brown.500" bg="brown.50">
         <PopoverArrow bg="brown.500" />
         {color !== 'green' && (
