@@ -11,7 +11,7 @@ import "leaflet-easybutton/src/easy-button.css";
 import L, { Point } from "leaflet";
 import "font-awesome/css/font-awesome.min.css";
 import { DataContext } from "./Contexts";
-import { Divider, Text, useToast } from "@chakra-ui/react";
+import { Text, useToast } from "@chakra-ui/react";
 
 import './styles.css'
 import { CABA_BOUNDS, OBELISCOU } from "./Constants";
@@ -162,7 +162,6 @@ function Map() {
         const isNear = Object.keys(nearestEstaciones).includes(station_id.toString())
         const bicis_disponibles = bicis[station_id]?.num_bikes_available
         const color = nearestEstaciones[station_id]?.color
-        const leave_at = nearestEstaciones[station_id]?.leave_at
         const icon = BiciIconGen(bicis_disponibles, color)
         const offset = new Point(25, -1)
         return (<Marker
@@ -175,8 +174,6 @@ function Map() {
                 <br />
                 {Math.round(nearestEstaciones[station_id].distance, 2)} metros
                 <br />
-                <Divider my={1} />
-                Te conviene salir {color === 'green' ? 'ahora' : `en ${Math.round(leave_at, 1)} ${Math.round(leave_at, 1) === 1 ? 'minuto' : 'minutos'}`}
               </>}
             </Text>
           </Popup>
