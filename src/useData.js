@@ -38,6 +38,7 @@ const useData = () => {
   const prevCenter = React.useRef();
 
   useEffect(() => {
+    // On boot we fetch the station information and the bike availability
     const fetchStationInformation = async () => {
       try {
         const stationsById = await getBackend('stations')
@@ -46,18 +47,16 @@ const useData = () => {
         setBackendDead(true)
       }
     }
-    fetchStationInformation()
-  }, [])
-
-  useEffect(() => {
     const fetchBicis = async () => {
       const bicisByStationId = await getBackend('stations/status')
       setBicis(bicisByStationId)
     }
-    fetchBicis()
-    // We call it on boot, and then set a timer to call it every 30 seconds
-    const interval = setInterval(fetchBicis, 30000);
 
+    fetchStationInformation()
+    fetchBicis()
+
+    // We refresh the bike availability every 30 seconds
+    const interval = setInterval(fetchBicis, 30000);
     return () => clearInterval(interval);
   }, [])
 
