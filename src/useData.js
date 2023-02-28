@@ -64,7 +64,7 @@ const useData = () => {
     // We only update the predictions if we moved at least 200 meters away from our previous location
     // https://blog.logrocket.com/accessing-previous-props-state-react-hooks/
     const distance = prevCenter.current ? L.latLng(center).distanceTo(L.latLng(prevCenter.current)) : 201
-    if (distance <= 200) {
+    if (distance <= 200 || !Object.keys(estaciones).length) {
       return
     }
     prevCenter.current = center
