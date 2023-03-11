@@ -4,6 +4,8 @@ Predictor de disponibilidad de bicis de la Ciudad de Buenos Aires
 
 This repo contains the front web client of [BicisBA](https://github.com/BicisBA), a project that consists of predicting the best rental bike station to go to while you on the move.
 
+For a full overview of BicisBA and its backend, you can visit the [project site](https://github.com/BicisBA/)
+
 The web app predicts on which of your nearest stations you have the best chance of finding a bike for you to ride.
 
 The stations are classified in three categories
