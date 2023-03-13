@@ -11,10 +11,12 @@ import "leaflet-easybutton/src/easy-button.css";
 import L, { Point } from "leaflet";
 import "font-awesome/css/font-awesome.min.css";
 import { DataContext } from "./Contexts";
-import { Text, useToast } from "@chakra-ui/react";
+import { Icon, IconButton, Link, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Text, useDisclosure, useToast } from "@chakra-ui/react";
+import { BsInfo } from "react-icons/bs"
 
 import './styles.css'
 import { CABA_BOUNDS, OBELISCOU } from "./Constants";
+import { ExternalLinkIcon } from "@chakra-ui/icons";
 
 function LeafletPlugins() {
   const map = useMap();
@@ -125,6 +127,7 @@ function LeafletPlugins() {
 }
 
 function Map() {
+  const { isOpen, onOpen, onClose } = useDisclosure()
   const { estaciones, center, nearestEstaciones, bicis } = React.useContext(DataContext);
 
   const BiciIconGen = (n, color = undefined) => new L.DivIcon({
@@ -147,42 +150,80 @@ function Map() {
   })
 
   return (
-    <MapContainer
-      center={OBELISCOU}
-      maxBounds={CABA_BOUNDS}
-      maxBoundsViscosity={0.9}
-      zoom={17}
-      minZoom={13}
-      maxZoom={18}
-      style={{ height: "100vh", width: "100vw" }}
-    >
-      <TileLayer url="https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png" />
-      {Object.values(estaciones).map((estacion) => {
-        const station_id = estacion.station_id
-        const isNear = Object.keys(nearestEstaciones).includes(station_id.toString())
-        const bicis_disponibles = bicis[station_id]?.num_bikes_available
-        const color = nearestEstaciones[station_id]?.color
-        const icon = BiciIconGen(bicis_disponibles, color)
-        const offset = new Point(25, -1)
-        return (<Marker
-          icon={icon}
-          position={[estacion.lat, estacion.lon]} key={station_id}>
-          <Popup closeButton={false} offset={offset}>
-            <Text textAlign={'center'}>
-              <strong>{estacion.name.toUpperCase().split('-')[1]}</strong>
-              {isNear && <>
-                <br />
-                {Math.round(nearestEstaciones[station_id].distance, 2)} metros
-                <br />
-              </>}
-            </Text>
-          </Popup>
-        </Marker>)
-      })}
-      <Marker icon={CurrentLocationMarker} position={center} />
-      <LeafletPlugins />
+    <>
+      <MapContainer
+        center={OBELISCOU}
+        maxBounds={CABA_BOUNDS}
+        maxBoundsViscosity={0.9}
+        zoom={17}
+        minZoom={13}
+        maxZoom={18}
+        style={{ height: "100vh", width: "100vw" }}
+      >
+        <IconButton
+          zIndex={1000}
+          right={2}
+          top={2}
+          variant="solid"
+          border="2px solid"
+          borderColor="gray.500"
+          colorScheme="gray"
+          position={"absolute"}
+          size="sm"
+          icon={<Icon as={BsInfo} boxSize={7} />}
+          onClick={onOpen}
+        />
+        <TileLayer url="https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png" />
+        {Object.values(estaciones).map((estacion) => {
+          const station_id = estacion.station_id
+          const isNear = Object.keys(nearestEstaciones).includes(station_id.toString())
+          const bicis_disponibles = bicis[station_id]?.num_bikes_available
+          const color = nearestEstaciones[station_id]?.color
+          const icon = BiciIconGen(bicis_disponibles, color)
+          const offset = new Point(25, -1)
+          return (<Marker
+            icon={icon}
+            position={[estacion.lat, estacion.lon]} key={station_id}>
+            <Popup closeButton={false} offset={offset}>
+              <Text textAlign={'center'}>
+                <strong>{estacion.name.toUpperCase().split('-')[1]}</strong>
+                {isNear && <>
+                  <br />
+                  {Math.round(nearestEstaciones[station_id].distance, 2)} metros
+                  <br />
+                </>}
+              </Text>
+            </Popup>
+          </Marker>)
+        })}
+        <Marker icon={CurrentLocationMarker} position={center} />
+        <LeafletPlugins />
+      </MapContainer>
 
-    </MapContainer>
+      <Modal isOpen={isOpen} onClose={onClose} size="xl">
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Bicis BA</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            BicisBA te ayuda a encontrar la mejor estación de <Link color="#ec7000" href="https://baecobici.com.ar/" isExternal={true}>EcoBicis</Link> para vos, y evitar caminar hacia una estación sin bicis.
+            <br />
+            <br />
+            Las estaciones se dividen en <Text as="span" color="green.600">verdes</Text>, <Text as="span" color="yellow.600">amarillas</Text> y <Text as="span" color="red.600">rojas</Text> según la disponibilidad prevista de bicicletas.
+            <br />
+            <br />
+            Siempre te conviene ir a la estación <Text as="span" color="green.600">verde</Text> más cercana que tengas!
+
+          </ModalBody>
+          <ModalFooter>
+            Muchísima más info en el
+            <Link color="blue.400" ml={1} isExternal={true} href="https://github.com/BicisBA/BicisBA.github.io">
+              sitio del proyecto <ExternalLinkIcon ml={0} />
+            </Link>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+    </>
   );
 }
 
