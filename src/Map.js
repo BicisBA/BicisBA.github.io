@@ -206,10 +206,7 @@ function Map() {
           <ModalHeader>Bicis BA</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            Este predictor de <Link color="#ec7000" href="https://baecobici.com.ar/" isExternal={true}>Ecobicis de CABA</Link> te ayuda a elegir la estación con bicicletas disponibles más cercana para evitar llegar a una estación sin bicis.
-            <br />
-            <br />
-            La idea es predecir de las estaciones que tengas cerca cuál va a tener bicicletas disponibles<Text as={"i"}> para cuando lleguemos ahí.</Text>
+            BicisBA te ayuda a encontrar la mejor estación de <Link color="#ec7000" href="https://baecobici.com.ar/" isExternal={true}>EcoBicis</Link> para vos, y evitar caminar hacia una estación sin bicis.
             <br />
             <br />
             Las estaciones se dividen en <Text as="span" color="green.600">verdes</Text>, <Text as="span" color="yellow.600">amarillas</Text> y <Text as="span" color="red.600">rojas</Text> según la disponibilidad prevista de bicicletas.
